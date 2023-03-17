@@ -11,38 +11,41 @@ body {
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr auto;
   grid-template-areas: 
-    " sidebar image"
+    " sidebar image "
     "sidebar slider ";
-  height: 100vh;
+  height: 90vh;
   width: 100vw;
-  background-color: #DADADA;
+  background-color: rgb(86, 83, 83);
 }
 
 .main-image {
   grid-area: image;
-  background-image: url("https://source.unsplash.com/EwKXn5CapA4");
   width: 100%;
   height: 100%;
   background-position: top center;
   background-size: contain;
   background-repeat: no-repeat;
+  
 }
 
 .sidebar {
   grid-area: sidebar;
-  background-color: hsl(265, 100%, 86%);
+  background-color: rgb(86, 83, 83);
   border-left: 1px solid hsl(265, 100%, 56%);
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
+
 .sidebar-item {
   cursor: pointer;
   border: none;
   outline: none;
-  background-color: hsl(265, 100%, 86%);
-  padding: 1rem;
+  background-color: black;
+  color:white;
+  width:100%;
+  padding: 2rem;
   position: relative;
   transition: background-color 150ms;
 }
@@ -73,9 +76,72 @@ body {
   grid-area: slider;
   margin-top: 2rem;
   padding: 2rem;
+  display:flex;
+  justify-content:center;
+  background-color: white
 }
 
 .slider {
-  width: 100%;
+  width: 50%;
+  cursor: pointer;
+
+}
+
+
+.App {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  flex-direction: column;
+}
+
+img {
+  width: 300px;
+  margin: 10px;
+  
+}
+
+
+
+.image-upload-container {
+  display: flex;
+  justify-content:center;
+  justify-content:space-around;
+  align-items: center;
+  margin-top: 0.5rem;
+  height:35px;
+  padding:20px
+}
+
+.file-label {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
+
+.upload-button {
+  background-color: #008CBA;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #006F8F;
+}
+
+.upload-button:active {
+  background-color: #004E65;
+}
+
+/* Hide the input file element */
+#fileInput {
+  display: none;
+}
+

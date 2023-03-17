@@ -1,7 +1,19 @@
 import Slider from "./component/Slider.jsx"
 import "./App.css"
+import { AiOutlineCloudUpload } from 'react-icons/ai';
 import Sidebaritem from "./component/Sidebaritem.jsx";
-import React, { useState } from 'react';
+import  { useState,useEffect } from 'react';
+
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+} from "firebase/storage";
+import { storage } from "./firebase";
+import { v4 } from "uuid";
+
 
 const DEFAULT_OPTIONS = [
   {
@@ -80,6 +92,32 @@ function App() {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
   const [options, setOptions] = useState(DEFAULT_OPTIONS)
   const selectedOption = options[selectedOptionIndex]
+ 
+
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageUrls, setImageUrls] = useState([]);
+
+  const imagesListRef = ref(storage, "images/");
+  const uploadFile = () => {
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageUrls((prev) => [...prev, url]);
+      });
+    });
+  };
+
+  useEffect(() => {
+    listAll(imagesListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setImageUrls((prev) => [...prev, url]);
+        });
+      });
+    });
+  }, [imageUpload]);
+
 
   function handleSliderChange({ target }) {
     setOptions(prevOptions => {
@@ -97,12 +135,31 @@ function App() {
 
     return { filter: filters.join(' ') }
   }
-
-  console.log(getImageStyle())
+ 
 
   return (
-    <div className="container">
-      <div className="main-image" style={getImageStyle()} />
+   <>
+   <div className="image-upload-container">
+   <input
+        type="file"
+        id="fileInput"
+        onChange={(event) => {
+          setImageUpload(event.target.files[0]);
+        }}
+      />
+        <label htmlFor="fileInput" className="file-label"><AiOutlineCloudUpload/> Choose an image</label>
+
+      <button className="upload-button" onClick={uploadFile}> Upload Image</button>
+
+   </div>
+   <div className="container">
+      
+      <div className="main-image" style={getImageStyle()} >
+      <div className="App"><img src={imageUrls[0]} />;</div>
+     
+
+
+      </div>
       <div className="sidebar">
         {options.map((option, index) => {
           return (
@@ -122,6 +179,7 @@ function App() {
         handleChange={handleSliderChange}
       />
     </div>
+   </>
   )
 }
 
